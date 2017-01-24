@@ -2,6 +2,7 @@ package thomas.tools;
 
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -41,6 +42,14 @@ public class DateUtilTest {
             System.out.println(params[i]);
         }
     }
+
+    @Test
+    public void plus(){
+        LocalDateTime ldt = DateUtil.currentDateTime();
+        Object obj = DateUtil.plus(ldt,6,TypeTools.HOURS);
+        log(obj.toString());
+    }
+
 
     @Test
     public void test1() {

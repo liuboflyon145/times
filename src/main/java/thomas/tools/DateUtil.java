@@ -8,8 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
-import java.time.temporal.TemporalField;
+import java.time.temporal.TemporalUnit;
 import java.time.temporal.UnsupportedTemporalTypeException;
 import java.util.Date;
 import java.util.Objects;
@@ -29,7 +30,11 @@ public class DateUtil {
      * @return YYYY-MM-dd HH:mm:ss
      */
     public static String now() {
-        return LocalDateTime.now().format(TypeTools.DATETIME);
+        return LocalDateTime.now().format(TypeTools.DATETIMEPATTERN);
+    }
+
+    public static LocalDateTime currentDateTime() {
+        return LocalDateTime.now();
     }
 
     /**
@@ -38,7 +43,7 @@ public class DateUtil {
      * @return YYYY-MM-dd
      */
     public static String today() {
-        return LocalDateTime.now().format(TypeTools.DATE);
+        return LocalDateTime.now().format(TypeTools.DATEPATTERN);
     }
 
     /**
@@ -47,7 +52,7 @@ public class DateUtil {
      * @return HH:mm:ss
      */
     public static String time() {
-        return LocalDateTime.now().format(TypeTools.TIME);
+        return LocalDateTime.now().format(TypeTools.TIMEPATTERN);
     }
 
 
@@ -102,6 +107,7 @@ public class DateUtil {
 
     /**
      * 将dateTime转换成tClass的Object对象
+     *
      * @param dateTime
      * @param tClass
      * @return
@@ -111,20 +117,20 @@ public class DateUtil {
         Objects.requireNonNull(dateTime, "dateTime");
         Object obj = null;
 
-        switch (tClass.getSimpleName()) {
-            case "LocalDateTime":
+        switch (tClass.getName()) {
+            case TypeTools.LOCALDATETIME:
                 dateTime = dateTime.trim().replaceAll(" ", "T");
                 obj = LocalDateTime.parse(dateTime);
                 break;
-            case "LocalDate":
+            case TypeTools.LOCALDATE:
                 dateTime = dateTime.trim().split("\\s|T")[0];
                 obj = LocalDate.parse(dateTime);
                 break;
-            case "LocalTime":
+            case TypeTools.LOCALTIME:
                 dateTime = dateTime.trim().split("\\s|T")[1];
                 obj = LocalTime.parse(dateTime);
                 break;
-            case "Date":
+            case TypeTools.DATE:
                 dateTime = dateTime.trim().replaceAll("T", " ");
                 obj = strToDate(dateTime);
                 break;
@@ -141,8 +147,70 @@ public class DateUtil {
         return formatter.parse(strDate, pos);
     }
 
-    public static void plus(Object obj,int num){
+    public static Object plus(Object obj, int num, String durationType) {
+        switch (obj.getClass().getName()) {
+            case TypeTools.LOCALDATETIME:
+                return plus((LocalDateTime) obj, num, durationType);
+            case TypeTools.LOCALDATE:
+                return plus((LocalDate) obj, num, durationType);
+            case TypeTools.LOCALTIME:
+                return plus((LocalDate) obj, num, durationType);
+            default:
+                return null;
+        }
+    }
 
+    private static LocalDateTime plus(LocalDateTime ldt, int num, String durationType) {
+        switch (durationType) {
+            case TypeTools.YEARS:
+                return LocalDateTime.of(plus(ldt.toLocalDate(), num, durationType), ldt.toLocalTime());
+            case TypeTools.MONTHS:
+                return LocalDateTime.of(plus(ldt.toLocalDate(), num, durationType), ldt.toLocalTime());
+            case TypeTools.DAYS:
+                return LocalDateTime.of(plus(ldt.toLocalDate(), num, durationType), ldt.toLocalTime());
+            case TypeTools.WEEKS:
+                return LocalDateTime.of(plus(ldt.toLocalDate(), num, durationType), ldt.toLocalTime());
+            case TypeTools.HOURS:
+                return LocalDateTime.of(ldt.toLocalDate(), plus(ldt.toLocalTime(), num, durationType));
+            case TypeTools.MINUTES:
+                return LocalDateTime.of(ldt.toLocalDate(), plus(ldt.toLocalTime(), num, durationType));
+            case TypeTools.SECONDS:
+                return LocalDateTime.of(ldt.toLocalDate(), plus(ldt.toLocalTime(), num, durationType));
+            case TypeTools.NANOS:
+                return LocalDateTime.of(ldt.toLocalDate(), plus(ldt.toLocalTime(), num, durationType));
+            default:
+                return null;
+        }
+    }
+
+    private static LocalDate plus(LocalDate ld, int num, String durationType) {
+        switch (durationType) {
+            case TypeTools.DAYS:
+                return ld.plusDays(num);
+            case TypeTools.MONTHS:
+                return ld.plusMonths(num);
+            case TypeTools.YEARS:
+                return ld.plusYears(num);
+            case TypeTools.WEEKS:
+                return ld.plusWeeks(num);
+            default:
+                return null;
+        }
+    }
+
+    private static LocalTime plus(LocalTime lt, int num, String durationType) {
+        switch (durationType) {
+            case TypeTools.HOURS:
+                return lt.plusHours(num);
+            case TypeTools.MINUTES:
+                return lt.plusMinutes(num);
+            case TypeTools.SECONDS:
+                return lt.plusSeconds(num);
+            case TypeTools.NANOS:
+                return lt.plusNanos(num);
+            default:
+                return null;
+        }
     }
 
 }
