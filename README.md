@@ -11,6 +11,7 @@ import java.util.Date;
 /**
  * Created by liubo16 on 2017/1/23.
  */
+   
     @Test
     public void now() throws Exception {
         log("now", DateUtil.now());
@@ -65,4 +66,22 @@ import java.util.Date;
             log(tmp);
             stop += splitData[i];
         }
+    }
+
+    @Test
+    public void getFirstDay(){
+        log("first day of month "+DateUtil.getFirstDayOfMonth() );
+        log("last day of month "+DateUtil.getLastDayOfMonth());
+    }
+
+    @Test
+    public void isBefore() throws Exception {
+        log("is before "+DateUtil.isBefore((LocalDateTime) DateUtil.parse("2017-02-05 12:12:05",LocalDateTime.class),DateUtil.currentDateTime()));
+        log("is before "+DateUtil.isBefore(DateUtil.currentDateTime(),(LocalDateTime) DateUtil.parse("2017-02-05 12:12:05",LocalDateTime.class)));
+    }
+
+    @Test
+    public void testWeek(){
+        log("current week is "+DateUtil.getNthWeek(DateUtil.currentDate()));
+        log("current week is "+DateUtil.getNthWeek(DateUtil.currentDateTime()));
     }

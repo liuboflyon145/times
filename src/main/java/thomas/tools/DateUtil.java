@@ -22,6 +22,7 @@ import java.util.logging.Logger;
  * Created by liubo16 on 2017/1/23.
  */
 public class DateUtil {
+
     private static final Logger log = Logger.getLogger("DateUtil");
 
     /**
@@ -33,8 +34,22 @@ public class DateUtil {
         return LocalDateTime.now().format(TypeTools.DATETIMEPATTERN);
     }
 
+    /**
+     * 当前时间日期
+     *
+     * @return LocalDateTime
+     */
     public static LocalDateTime currentDateTime() {
         return LocalDateTime.now();
+    }
+
+    /**
+     * 当前日期
+     *
+     * @return LocalDate
+     */
+    public static LocalDate currentDate() {
+        return LocalDate.now();
     }
 
     /**
@@ -141,13 +156,27 @@ public class DateUtil {
         return obj;
     }
 
+    /**
+     * 将string转换成Date
+     *
+     * @param strDate
+     * @return
+     */
     private static Date strToDate(String strDate) {
         SimpleDateFormat formatter = new SimpleDateFormat(TypeTools.DEFAULT_PATTERN);
         ParsePosition pos = new ParsePosition(0);
         return formatter.parse(strDate, pos);
     }
 
-    public static Object plus(Object obj, int num, String durationType) {
+    /**
+     * 时间日期加减运算
+     *
+     * @param obj
+     * @param num
+     * @param durationType
+     * @return
+     */
+    public static synchronized Object plus(Object obj, int num, String durationType) {
         switch (obj.getClass().getName()) {
             case TypeTools.LOCALDATETIME:
                 return plus((LocalDateTime) obj, num, durationType);
@@ -160,7 +189,7 @@ public class DateUtil {
         }
     }
 
-    private static synchronized LocalDateTime plus(LocalDateTime ldt, int num, String durationType) {
+    private static LocalDateTime plus(LocalDateTime ldt, int num, String durationType) {
         switch (durationType) {
             case TypeTools.YEARS:
                 return LocalDateTime.of(plus(ldt.toLocalDate(), num, durationType), ldt.toLocalTime());
@@ -213,4 +242,67 @@ public class DateUtil {
         }
     }
 
+
+    /**
+     * 获取当月第一天、
+     *
+     * @return LocalDate
+     */
+    public static LocalDate getFirstDayOfMonth() {
+        LocalDate curr = currentDate();
+        return LocalDate.of(curr.getYear(), curr.getMonth(), 1);
+    }
+
+    /**
+     * 当月最后一天
+     *
+     * @return LocalDate
+     */
+    public static LocalDate getLastDayOfMonth() {
+        LocalDate local = currentDate();
+        return LocalDate.of(local.getYear(), local.getMonth(), local.lengthOfMonth());
+    }
+
+
+    /**
+     * 时间比较
+     *
+     * @param thisTime
+     * @param thatTime
+     * @return
+     */
+    public static boolean isBefore(LocalDateTime thisTime, LocalDateTime thatTime) {
+        return thisTime.isBefore(thatTime);
+    }
+
+    /**
+     * 时间比较
+     *
+     * @param thisDate
+     * @param thatDate
+     * @return
+     */
+    public static boolean isBefore(LocalDate thisDate, LocalDate thatDate) {
+        return thisDate.isBefore(thatDate);
+    }
+
+    /**
+     * 获取当前时间是第几周
+     *
+     * @param localDateTime
+     * @return
+     */
+    public static int getNthWeek(LocalDateTime localDateTime) {
+        return localDateTime.getDayOfWeek().getValue();
+    }
+
+    /**
+     * 获取当前日期是第几周
+     *
+     * @param localDate
+     * @return
+     */
+    public static int getNthWeek(LocalDate localDate) {
+        return localDate.getDayOfWeek().getValue();
+    }
 }
