@@ -160,7 +160,7 @@ public class DateUtil {
         }
     }
 
-    private static LocalDateTime plus(LocalDateTime ldt, int num, String durationType) {
+    private static synchronized LocalDateTime plus(LocalDateTime ldt, int num, String durationType) {
         switch (durationType) {
             case TypeTools.YEARS:
                 return LocalDateTime.of(plus(ldt.toLocalDate(), num, durationType), ldt.toLocalTime());

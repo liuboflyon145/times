@@ -1,8 +1,6 @@
 package thomas.tools;
 
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalField;
 
 /**
  * Created by liubo16 on 2017/1/23.

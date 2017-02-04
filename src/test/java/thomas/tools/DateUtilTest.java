@@ -27,7 +27,7 @@ public class DateUtilTest {
 
     @Test
     public void format() throws Exception {
-//        log("java.util.Date format",DateUtil.format(new Date(),TypeTools.DATE_PATTERN));
+        log("java.util.Date format",DateUtil.format(new Date(),TypeTools.DATE_PATTERN));
         log("java.sql.Date format", DateUtil.format(new java.sql.Date(1485166922910L), TypeTools.DEFAULT_PATTERN));
     }
 
